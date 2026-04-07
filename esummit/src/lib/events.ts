@@ -77,7 +77,7 @@ export const eventDefinitions: EventDefinition[] = [
     shortCode: 'SPS',
     name: 'Speaker Session',
     description:
-      'Stay tuned for an exciting lineup of visionary entrepreneurs and dynamic discussions that will inspire and energize you.',
+      'Prominent entrepreneurs from across Karnataka will be present as guest speakers along with engaging panel discussions.',
     fee: '₹100 per participant',
     maxTeams: 250,
     teamSize: '3 students + 1 faculty (optional)',
