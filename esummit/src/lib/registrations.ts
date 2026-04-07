@@ -108,8 +108,8 @@ export async function getRegistrationCount(event: EventSlug) {
       return total + Math.max(1, participants);
     }, 0);
   } else {
-    const snapshot = await adminDb.collection('registrations').where('event', '==', event).count().get();
-    count = snapshot.data().count;
+    const snapshot = await adminDb.collection('registrations').where('event', '==', event).get();
+    count = snapshot.size;
   }
   await adminDb
     .collection('events')

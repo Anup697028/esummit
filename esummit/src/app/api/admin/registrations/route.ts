@@ -164,8 +164,8 @@ export async function GET(request: Request) {
           const records = snapshot.docs.map((doc) => doc.data() as RegistrationRecord);
           computedCount = countRegistrationsForEvent(event.slug, records);
         } else {
-          const snapshot = await adminDb.collection('registrations').where('event', '==', event.slug).count().get();
-          computedCount = snapshot.data().count;
+          const snapshot = await adminDb.collection('registrations').where('event', '==', event.slug).get();
+          computedCount = snapshot.size;
         }
         await adminDb.collection('events').doc(event.slug).set(
           {
