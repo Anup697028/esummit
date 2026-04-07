@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { ArrowRight, Award, Cpu, GraduationCap, Sparkles, Zap, Users, Share2, Lightbulb, Rocket } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, Award, BadgeCheck, Cpu, GraduationCap, Sparkles, Zap, Users, Share2, Lightbulb, Rocket } from 'lucide-react';
 import { SiteShell } from '@/components/site-shell';
 import { GlassCard, SectionTitle } from '@/components/ui';
 import { summitHighlights } from '@/lib/events';
-import { LegacyFramesGallery } from '@/components/legacy-frames-gallery'; // Gallery component with modal lightbox
 
 export default function HomePage() {
   return (
@@ -15,7 +15,7 @@ export default function HomePage() {
             className="absolute left-[-8%] top-[50%] h-[32rem] w-[32rem] -translate-y-1/2 bg-[url('/logo/logo.png')] bg-contain bg-left bg-no-repeat opacity-[0.12] mix-blend-overlay pointer-events-none sm:h-[40rem] sm:w-[40rem] lg:h-[48rem] lg:w-[48rem]"
             aria-hidden="true"
           />
-          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-18">
+          <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:px-8 lg:py-18">
             <div className="relative z-10 max-w-3xl space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.42em] text-cyan-100 shadow-[0_0_30px_rgba(34,211,238,0.08)] backdrop-blur-md">
                 <Sparkles className="h-4 w-4 text-cyan-300" /> EntreMITT 2026
@@ -36,6 +36,31 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
+            <GlassCard className="relative z-10 overflow-hidden border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-5">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.15),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.12),transparent_32%)]" />
+              <div className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-slate-950/50">
+                <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 py-4 text-[11px] uppercase tracking-[0.34em] text-cyan-100/80">
+                  <span>College Image Banner</span>
+                  <span>EntreMITT</span>
+                </div>
+                <div className="relative aspect-[4/3] sm:aspect-[16/10]">
+                  <Image
+                    src="/logo/mit-college.jfif"
+                    alt="MIT Thandavapura college banner"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                  />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08)_0%,rgba(2,6,23,0.32)_45%,rgba(2,6,23,0.7)_100%)]" />
+                </div>
+                <div className="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-6">
+                  <div className="max-w-xl rounded-2xl border border-white/10 bg-slate-950/55 p-4 shadow-[0_12px_40px_rgba(2,6,23,0.4)] backdrop-blur-md sm:p-5">
+                    <p className="text-xs uppercase tracking-[0.3em] text-cyan-200/80">Where ambition meets action</p>
+                    <p className="mt-2 text-sm leading-6 text-white/90">A refined showcase for EntreMITT, framed around the college identity and the energy of the summit.</p>
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
           </div>
         </section>
 
@@ -101,35 +126,30 @@ export default function HomePage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-            <div>
-              <SectionTitle eyebrow="Highlights" title="Past Event Highlights" description="A curated showcase of E-Cell events from previous editions." />
-              <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
-                {[
-                  { title: 'Pitch Fest', subtitle: 'EUREKA', Icon: Zap, color: 'from-amber-500/30 via-amber-500/10 to-orange-500/20', iconColor: 'text-amber-400', borderColor: 'border-amber-400/30' },
-                  { title: 'Group Discussion', subtitle: 'Network & Learn', Icon: Users, color: 'from-blue-500/30 via-blue-500/10 to-cyan-500/20', iconColor: 'text-blue-400', borderColor: 'border-blue-400/30' },
-                  { title: 'Pitch in a Meme', subtitle: 'Social Challenge', Icon: Share2, color: 'from-pink-500/30 via-pink-500/10 to-rose-500/20', iconColor: 'text-pink-400', borderColor: 'border-pink-400/30' },
-                  { title: 'Illuminate Workshop', subtitle: 'Knowledge Hub', Icon: Lightbulb, color: 'from-yellow-500/30 via-yellow-500/10 to-amber-500/20', iconColor: 'text-yellow-400', borderColor: 'border-yellow-400/30' },
-                  { title: 'Gen E', subtitle: 'Entrepreneurship', Icon: Rocket, color: 'from-purple-500/30 via-purple-500/10 to-indigo-500/20', iconColor: 'text-purple-400', borderColor: 'border-purple-400/30' }
-                ].map((event) => (
-                  <div key={event.title} className={`group relative overflow-hidden rounded-2xl border ${event.borderColor} bg-gradient-to-br ${event.color} p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/50 hover:shadow-2xl hover:shadow-black/40 hover:-translate-y-1`}>
-                    <div className={`inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${event.color} mb-4 transition-all duration-300 group-hover:scale-125 group-hover:shadow-lg group-hover:shadow-black/30 border border-white/20`}>
-                      <event.Icon className={`h-7 w-7 ${event.iconColor}`} />
-                    </div>
-                    <h3 className="text-lg font-semibold text-white transition duration-300 group-hover:text-white letter-spacing-1">{event.title}</h3>
-                    {event.subtitle && <p className="mt-2 text-sm font-medium text-slate-300 transition duration-300 group-hover:text-white/90">{event.subtitle}</p>}
-                    <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/5 via-transparent to-white/0 opacity-0 transition group-hover:opacity-100" />
-                  </div>
-                ))}
+          <SectionTitle eyebrow="Highlights" title="Past Event Highlights" description="A curated showcase of E-Cell events from previous editions." />
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+            {[
+              { title: 'Pitch Fest', subtitle: 'EUREKA', Icon: Zap, color: 'from-amber-500/30 via-amber-500/10 to-orange-500/20', iconColor: 'text-amber-400', borderColor: 'border-amber-400/30' },
+              { title: 'Group Discussion', subtitle: 'Network & Learn', Icon: Users, color: 'from-blue-500/30 via-blue-500/10 to-cyan-500/20', iconColor: 'text-blue-400', borderColor: 'border-blue-400/30' },
+              { title: 'Pitch in a Meme', subtitle: 'Social Challenge', Icon: Share2, color: 'from-pink-500/30 via-pink-500/10 to-rose-500/20', iconColor: 'text-pink-400', borderColor: 'border-pink-400/30' },
+              { title: 'Illuminate Workshop', subtitle: 'Knowledge Hub', Icon: Lightbulb, color: 'from-yellow-500/30 via-yellow-500/10 to-amber-500/20', iconColor: 'text-yellow-400', borderColor: 'border-yellow-400/30' },
+              { title: 'Gen E', subtitle: 'Entrepreneurship', Icon: Rocket, color: 'from-purple-500/30 via-purple-500/10 to-indigo-500/20', iconColor: 'text-purple-400', borderColor: 'border-purple-400/30' }
+            ].map((event) => (
+              <div key={event.title} className={`group relative overflow-hidden rounded-2xl border ${event.borderColor} bg-gradient-to-br ${event.color} p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/50 hover:shadow-2xl hover:shadow-black/40 hover:-translate-y-1`}>
+                <div className={`inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${event.color} mb-4 transition-all duration-300 group-hover:scale-125 group-hover:shadow-lg group-hover:shadow-black/30 border border-white/20`}>
+                  <event.Icon className={`h-7 w-7 ${event.iconColor}`} />
+                </div>
+                <h3 className="text-lg font-semibold text-white transition duration-300 group-hover:text-white letter-spacing-1">{event.title}</h3>
+                {event.subtitle && <p className="mt-2 text-sm font-medium text-slate-300 transition duration-300 group-hover:text-white/90">{event.subtitle}</p>}
+                <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/5 via-transparent to-white/0 opacity-0 transition group-hover:opacity-100" />
               </div>
-            </div>
-            <LegacyFramesGallery />
+            ))}
           </div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <SectionTitle eyebrow="Speakers" title="Speakers" description="" />
-          <GlassCard className="mt-5 text-sm text-slate-300">Stay tuned for an exciting lineup of visionary entrepreneurs and dynamic discussions that will inspire and energize you.</GlassCard>
+          <GlassCard className="mt-5 text-sm text-slate-300">Prominent entrepreneurs from across Karnataka will be present as guest speakers along with engaging panel discussions.</GlassCard>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -142,10 +162,6 @@ export default function HomePage() {
             </div>
           </GlassCard>
         </section>
-
-        <footer className="px-4 pb-8 pt-2 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
-          © All rights reserved by E-Cell MITT
-        </footer>
       </main>
     </SiteShell>
   );
