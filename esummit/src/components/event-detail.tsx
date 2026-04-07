@@ -30,6 +30,7 @@ type CoordinatorInfo = {
 
 const EVENT_COORDINATORS: Record<EventSlug, CoordinatorInfo> = {
   'case-study': {
+    faculty: { name: 'Mr. Manjunath', phone: '8095218110' },
     students: [
       { name: 'Beerabbi Basavaraja', phone: '7204488641', email: 'bbeerabbi@gmail.com' },
       { name: 'Misbah Khanum', phone: '9762539924', email: 'khanammisba489@gmail.com' }
@@ -73,10 +74,11 @@ const EVENT_COORDINATORS: Record<EventSlug, CoordinatorInfo> = {
 };
 
 function ruleBlock(slug: EventSlug, maxTeams: number) {
-  if (slug === 'quiz') return ['Team size: exactly 2', `Max teams: ${maxTeams}`, 'Fee: ₹400 per team'];
-  if (slug === 'elocution') return ['Team size: exactly 2', `Max teams: ${maxTeams}`, 'Fee: ₹400 per team'];
+  if (slug === 'case-study') return ['Team size: 3–4', `Max teams: ${maxTeams}`, 'Fee: ₹699 per team', 'Faculty Coordinator: Mr. Manjunath | 8095218110'];
+  if (slug === 'quiz') return ['Team size: exactly 2', `Max participants: ${maxTeams}`, 'Fee: ₹399 per team'];
+  if (slug === 'elocution') return ['Team size: exactly 2', `Max teams: ${maxTeams}`, 'Fee: ₹399 per team'];
   if (slug === 'speaker-session') return ['Individual or university registration (3 to 4 participants)', `Max participants: ${maxTeams}`, 'Fee: ₹100 per participant'];
-  return ['Team size: 3–4', `Max teams: ${maxTeams}`, 'Fee: ₹700 per team'];
+  return ['Team size: 3–4', `Max teams: ${maxTeams}`, 'Fee: ₹699 per team'];
 }
 
 export async function EventDetailPage({ slug }: { slug: EventSlug }) {
@@ -88,7 +90,7 @@ export async function EventDetailPage({ slug }: { slug: EventSlug }) {
   const isFull = registered >= event.maxTeams;
   const rulesDownload = getRulesDownloadConfig(event.slug);
   const isSpeakerSession = event.slug === 'speaker-session';
-  const registrationLabel = isSpeakerSession ? 'Registered Participants' : 'Registered Teams';
+  const registrationLabel = isSpeakerSession || event.slug === 'quiz' ? 'Registered Participants' : 'Registered Teams';
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">

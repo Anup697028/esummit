@@ -10,12 +10,15 @@ function sortByCreatedAtDesc(records: RegistrationRecord[]) {
 }
 
 function countRegistrationsForEvent(eventSlug: string, records: RegistrationRecord[]) {
-  if (eventSlug !== 'speaker-session') {
+  if (eventSlug !== 'speaker-session' && eventSlug !== 'quiz') {
     return records.length;
   }
 
   return records.reduce((total, record) => {
     const participants = Array.isArray(record.participants) ? record.participants.length : 0;
+    if (eventSlug === 'quiz') {
+      return total + Math.max(0, participants);
+    }
     return total + Math.max(1, participants);
   }, 0);
 }
@@ -154,12 +157,12 @@ export async function GET(request: Request) {
       eventDefinitions.map(async (event) => {
         const eventDoc = await adminDb.collection('events').doc(event.slug).get();
         const cachedCount = Number(eventDoc.data()?.registered_count ?? NaN);
-        if (event.slug !== 'speaker-session' && Number.isFinite(cachedCount) && cachedCount >= 0) {
+        if (event.slug !== 'speaker-session' && event.slug !== 'quiz' && Number.isFinite(cachedCount) && cachedCount >= 0) {
           return [event.slug, cachedCount] as const;
         }
 
         let computedCount = 0;
-        if (event.slug === 'speaker-session') {
+        if (event.slug === 'speaker-session' || event.slug === 'quiz') {
           const snapshot = await adminDb.collection('registrations').where('event', '==', event.slug).get();
           const records = snapshot.docs.map((doc) => doc.data() as RegistrationRecord);
           computedCount = countRegistrationsForEvent(event.slug, records);
@@ -170,6 +173,7 @@ export async function GET(request: Request) {
         await adminDb.collection('events').doc(event.slug).set(
           {
             registered_count: computedCount,
+            fee: event.fee,
             registration_open: computedCount < event.maxTeams,
             updatedAt: new Date().toISOString()
           },

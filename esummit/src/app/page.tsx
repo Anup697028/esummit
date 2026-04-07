@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Award, BadgeCheck, Cpu, GraduationCap, Sparkles, Zap, Users, Share2, Lightbulb, Rocket } from 'lucide-react';
 import { SiteShell } from '@/components/site-shell';
+import { GallerySection } from '../components/gallery-section';
 import { GlassCard, SectionTitle } from '@/components/ui';
 import { summitHighlights } from '@/lib/events';
 
@@ -40,7 +41,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.15),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.12),transparent_32%)]" />
               <div className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-slate-950/50">
                 <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 py-4 text-[11px] uppercase tracking-[0.34em] text-cyan-100/80">
-                  <span>College Image Banner</span>
+                  <span aria-hidden="true" />
                   <span>EntreMITT</span>
                 </div>
                 <div className="relative aspect-[4/3] sm:aspect-[16/10]">
@@ -149,14 +150,16 @@ export default function HomePage() {
 
         <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <SectionTitle eyebrow="Speakers" title="Speakers" description="" />
-          <GlassCard className="mt-5 text-sm text-slate-300">Prominent entrepreneurs from across Karnataka will be present as guest speakers along with engaging panel discussions.</GlassCard>
+          <GlassCard className="mt-5 text-sm text-slate-300">Stay tuned for an exciting lineup of visionary entrepreneurs and dynamic discussions that will spark ideas, ignite ambition, and leave you inspired.</GlassCard>
         </section>
+
+        <GallerySection />
 
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <GlassCard className="border border-cyan-300/20 bg-gradient-to-r from-cyan-500/10 via-slate-900/60 to-amber-400/10 text-center">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-cyan-300/80">Prize Pool</p>
-              <h2 className="mt-3 bg-gradient-to-r from-amber-300 via-cyan-200 to-amber-200 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl">₹2,00,000 Prize Pool</h2>
+              <h2 className="mt-3 bg-gradient-to-r from-amber-300 via-cyan-200 to-amber-200 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl">Up to ₹200000 Prize Pool</h2>
               <p className="mt-3 text-sm text-slate-300">Exciting rewards for winners across all events!</p>
               <p className="mt-3 text-base font-semibold text-cyan-100">🎓 All participants will receive certificates</p>
             </div>

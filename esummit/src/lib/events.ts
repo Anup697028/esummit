@@ -3,7 +3,7 @@ import type { EventDefinition, EventSlug } from './types';
 const DEFAULT_MAX_TEAMS = Number(process.env.NEXT_PUBLIC_EVENT_MAX_TEAMS ?? 60);
 
 export const summitHighlights = {
-  prizePool: '₹2,00,000',
+  prizePool: 'Up to ₹200000',
   tagline: 'Innovation, leadership, and entrepreneurial excellence under one roof.'
 };
 
@@ -11,10 +11,10 @@ export const eventDefinitions: EventDefinition[] = [
   {
     slug: 'ideathon',
     shortCode: 'IDE',
-    name: 'Ideathon',
+    name: 'IdeathonX',
     description:
       'A platform for innovators to present groundbreaking startup ideas addressing real-world problems with scalable solutions.',
-    fee: '₹700',
+    fee: '₹699',
     maxTeams: DEFAULT_MAX_TEAMS,
     teamSize: '3–4',
     minParticipants: 3,
@@ -24,10 +24,10 @@ export const eventDefinitions: EventDefinition[] = [
   {
     slug: 'fusion-x',
     shortCode: 'FUS',
-    name: 'Fusion X',
+    name: 'FusionX',
     description:
       'Combine three or more existing business models to create a unique and innovative startup concept.',
-    fee: '₹700',
+    fee: '₹699',
     maxTeams: DEFAULT_MAX_TEAMS,
     teamSize: '3–4',
     minParticipants: 3,
@@ -40,7 +40,7 @@ export const eventDefinitions: EventDefinition[] = [
     name: 'Case Study Poster',
     description:
       'Analyze a real-world business problem and present your solution creatively through a structured poster.',
-    fee: '₹700',
+    fee: '₹699',
     maxTeams: DEFAULT_MAX_TEAMS,
     teamSize: '3–4',
     minParticipants: 3,
@@ -52,8 +52,8 @@ export const eventDefinitions: EventDefinition[] = [
     shortCode: 'QIZ',
     name: 'Quiz',
     description: 'Test your entrepreneurial knowledge through a competitive and engaging quiz.',
-    fee: '₹400',
-    maxTeams: DEFAULT_MAX_TEAMS,
+    fee: '₹399',
+    maxTeams: 100,
     teamSize: '2',
     minParticipants: 2,
     maxParticipants: 2,
@@ -65,7 +65,7 @@ export const eventDefinitions: EventDefinition[] = [
     name: 'Elocution',
     description:
       'Express your ideas on entrepreneurship, leadership, and innovation through impactful speaking.',
-    fee: '₹400',
+    fee: '₹399',
     maxTeams: DEFAULT_MAX_TEAMS,
     teamSize: '2',
     minParticipants: 2,
@@ -77,7 +77,7 @@ export const eventDefinitions: EventDefinition[] = [
     shortCode: 'SPS',
     name: 'Speaker Session',
     description:
-      'Prominent entrepreneurs from across Karnataka will be present as guest speakers along with engaging panel discussions.',
+      'Stay tuned for an exciting lineup of visionary entrepreneurs and dynamic discussions that will spark ideas, ignite ambition, and leave you inspired.',
     fee: '₹100 per participant',
     maxTeams: 250,
     teamSize: '3 students + 1 faculty (optional)',

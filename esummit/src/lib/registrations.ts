@@ -28,6 +28,7 @@ type EventCoordinators = {
 
 const EVENT_COORDINATORS: Record<EventSlug, EventCoordinators> = {
   'case-study': {
+    faculty: { name: 'Mr. Manjunath', phone: '8095218110' },
     students: [
       { name: 'Beerabbi Basavaraja', phone: '7204488641', email: 'bbeerabbi@gmail.com' },
       { name: 'Misbah Khanum', phone: '9762539924', email: 'khanammisba489@gmail.com' }
@@ -100,11 +101,14 @@ export async function getRegistrationCount(event: EventSlug) {
   }
 
   let count = 0;
-  if (event === 'speaker-session') {
+  if (event === 'speaker-session' || event === 'quiz') {
     const snapshot = await adminDb.collection('registrations').where('event', '==', event).get();
     count = snapshot.docs.reduce((total, doc) => {
       const data = doc.data() as RegistrationRecord;
       const participants = Array.isArray(data.participants) ? data.participants.length : 0;
+      if (event === 'quiz') {
+        return total + Math.max(0, participants);
+      }
       return total + Math.max(1, participants);
     }, 0);
   } else {
@@ -117,6 +121,7 @@ export async function getRegistrationCount(event: EventSlug) {
     .set(
       {
         registered_count: count,
+        fee: eventDefinition?.fee ?? null,
         registration_open: count < maxTeams,
         updatedAt: new Date().toISOString()
       },
@@ -198,7 +203,12 @@ export async function createRegistration(input: {
     throw new Error('Team name already exists for this event');
   }
 
-  const slotsNeeded = input.event === 'speaker-session' ? Math.max(1, input.participants.length) : 1;
+  const slotsNeeded =
+    input.event === 'speaker-session'
+      ? Math.max(1, input.participants.length)
+      : input.event === 'quiz'
+        ? Math.max(0, input.participants.length)
+        : 1;
   const { registrationId } = await createRegistrationId(input.event, event.maxTeams);
   const nowIso = new Date().toISOString();
   const record: RegistrationRecord = {
@@ -223,13 +233,19 @@ export async function createRegistration(input: {
     const eventSnapshot = await transaction.get(eventRef);
     let currentRegistrations = Number(eventSnapshot.data()?.registered_count ?? NaN);
 
-    if (input.event === 'speaker-session' || !Number.isFinite(currentRegistrations) || currentRegistrations < 0) {
+    if (input.event === 'speaker-session' || input.event === 'quiz' || !Number.isFinite(currentRegistrations) || currentRegistrations < 0) {
       const registrationsSnapshot = await transaction.get(registrationsRef.where('event', '==', input.event));
       if (input.event === 'speaker-session') {
         currentRegistrations = registrationsSnapshot.docs.reduce((total, doc) => {
           const data = doc.data() as RegistrationRecord;
           const participants = Array.isArray(data.participants) ? data.participants.length : 0;
           return total + Math.max(1, participants);
+        }, 0);
+      } else if (input.event === 'quiz') {
+        currentRegistrations = registrationsSnapshot.docs.reduce((total, doc) => {
+          const data = doc.data() as RegistrationRecord;
+          const participants = Array.isArray(data.participants) ? data.participants.length : 0;
+          return total + Math.max(0, participants);
         }, 0);
       } else {
         currentRegistrations = registrationsSnapshot.size;
@@ -248,6 +264,7 @@ export async function createRegistration(input: {
       {
         registered_count: nextRegistrations,
         max_teams: event.maxTeams,
+        fee: event.fee,
         registration_open: nextRegistrations < event.maxTeams,
         updatedAt: nowIso
       },
