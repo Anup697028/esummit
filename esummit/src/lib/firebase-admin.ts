@@ -1,10 +1,22 @@
 import { readFileSync } from 'node:fs';
 import admin from 'firebase-admin';
 
+function normalizeEnv(value?: string) {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  if (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+  ) {
+    return trimmed.slice(1, -1);
+  }
+  return trimmed;
+}
+
 function getServiceAccount() {
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+  const projectId = normalizeEnv(process.env.FIREBASE_PROJECT_ID);
+  const clientEmail = normalizeEnv(process.env.FIREBASE_CLIENT_EMAIL);
+  const privateKey = normalizeEnv(process.env.FIREBASE_PRIVATE_KEY)?.replace(/\\n/g, '\n');
 
   if (projectId && clientEmail && privateKey) {
     return { projectId, clientEmail, privateKey };
