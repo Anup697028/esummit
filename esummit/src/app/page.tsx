@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Award, BadgeCheck, Cpu, GraduationCap, Sparkles, Zap, Users, Share2, Lightbulb, Rocket } from 'lucide-react';
+import { ArrowRight, Award, BadgeCheck, Cpu, GraduationCap, Sparkles, Zap, Users, Share2, Lightbulb, Rocket, MapPin } from 'lucide-react';
 import { SiteShell } from '@/components/site-shell';
 import { GallerySection } from '../components/gallery-section';
 import { GlassCard, SectionTitle } from '@/components/ui';
@@ -46,19 +46,13 @@ export default function HomePage() {
                 </div>
                 <div className="relative aspect-[4/3] sm:aspect-[16/10]">
                   <Image
-                    src="/logo/mit-college.jfif"
+                    src="/logo/mitt-drone.jpg.jpeg"
                     alt="MIT Thandavapura college banner"
                     fill
                     priority
                     className="object-cover object-center"
                   />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08)_0%,rgba(2,6,23,0.32)_45%,rgba(2,6,23,0.7)_100%)]" />
-                </div>
-                <div className="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-6">
-                  <div className="max-w-xl rounded-2xl border border-white/10 bg-slate-950/55 p-4 shadow-[0_12px_40px_rgba(2,6,23,0.4)] backdrop-blur-md sm:p-5">
-                    <p className="text-xs uppercase tracking-[0.3em] text-cyan-200/80">Where ambition meets action</p>
-                    <p className="mt-2 text-sm leading-6 text-white/90">A refined showcase for EntreMITT, framed around the college identity and the energy of the summit.</p>
-                  </div>
                 </div>
               </div>
             </GlassCard>
@@ -162,6 +156,31 @@ export default function HomePage() {
               <h2 className="mt-3 bg-gradient-to-r from-amber-300 via-cyan-200 to-amber-200 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl">Up to ₹200000 Prize Pool</h2>
               <p className="mt-3 text-sm text-slate-300">Exciting rewards for winners across all events!</p>
               <p className="mt-3 text-base font-semibold text-cyan-100">🎓 All participants will receive certificates</p>
+            </div>
+          </GlassCard>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+          <GlassCard className="border border-cyan-300/20 bg-gradient-to-r from-cyan-500/10 via-slate-900/60 to-emerald-400/10">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-cyan-300/80">Venue</p>
+                <h2 className="mt-2 text-2xl font-bold text-white">MIT Thandavapura</h2>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-200">
+                  MIT Thandavapura,
+                  <br />
+                  Mysore - Ooty Road, Just off NH 766, Nanjangud Taluk, Thandavapura, Karnataka - 571302
+                </p>
+              </div>
+              <a
+                href="https://www.google.com/maps/place/MIT+Thandavapura/@12.178077,76.670324,17z/data=!4m6!3m5!1s0x3baf68ebcaaf5815:0xccb790eb902050cd!8m2!3d12.1780772!4d76.6703236!16s%2Fg%2F11c1p4drdk?hl=en-US&entry=ttu&g_ep=EgoyMDI2MDQwNi4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open venue in Google Maps"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-cyan-300/30 bg-cyan-300/15 text-cyan-100 transition hover:bg-cyan-300/25"
+              >
+                <MapPin className="h-5 w-5" />
+              </a>
             </div>
           </GlassCard>
         </section>

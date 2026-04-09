@@ -23,6 +23,23 @@ function countRegistrationsForEvent(eventSlug: string, records: RegistrationReco
   }, 0);
 }
 
+function countCheckedInForEvent(eventSlug: string, records: RegistrationRecord[]) {
+  if (eventSlug !== 'speaker-session' && eventSlug !== 'quiz') {
+    return records.filter((record) => Boolean(record.checked_in)).length;
+  }
+
+  return records.reduce((total, record) => {
+    if (!record.checked_in) {
+      return total;
+    }
+    const participants = Array.isArray(record.participants) ? record.participants.length : 0;
+    if (eventSlug === 'quiz') {
+      return total + Math.max(0, participants);
+    }
+    return total + Math.max(1, participants);
+  }, 0);
+}
+
 function csvEscape(value: unknown) {
   const text = typeof value === 'string' ? value : value == null ? '' : String(value);
   return `"${text.replace(/"/g, '""')}"`;
@@ -151,25 +168,27 @@ export async function GET(request: Request) {
     return authError;
   }
 
+  const registrationId = url.searchParams.get('registrationId')?.trim();
+  if (registrationId) {
+    const snapshot = await adminDb.collection('registrations').doc(registrationId).get();
+    if (!snapshot.exists) {
+      return NextResponse.json({ error: 'Registration not found' }, { status: 404 });
+    }
+
+    const record = snapshot.data() as RegistrationRecord;
+    const screenshotUrl = await resolveScreenshotUrl(record);
+    return NextResponse.json({ record: { ...record, screenshot_url: screenshotUrl } });
+  }
+
   const summary = url.searchParams.get('summary');
   if (summary === 'counts') {
     const entries = await Promise.all(
       eventDefinitions.map(async (event) => {
-        const eventDoc = await adminDb.collection('events').doc(event.slug).get();
-        const cachedCount = Number(eventDoc.data()?.registered_count ?? NaN);
-        if (event.slug !== 'speaker-session' && event.slug !== 'quiz' && Number.isFinite(cachedCount) && cachedCount >= 0) {
-          return [event.slug, cachedCount] as const;
-        }
+        const snapshot = await adminDb.collection('registrations').where('event', '==', event.slug).get();
+        const records = snapshot.docs.map((doc) => doc.data() as RegistrationRecord);
+        const computedCount = countRegistrationsForEvent(event.slug, records);
+        const checkedInCount = countCheckedInForEvent(event.slug, records);
 
-        let computedCount = 0;
-        if (event.slug === 'speaker-session' || event.slug === 'quiz') {
-          const snapshot = await adminDb.collection('registrations').where('event', '==', event.slug).get();
-          const records = snapshot.docs.map((doc) => doc.data() as RegistrationRecord);
-          computedCount = countRegistrationsForEvent(event.slug, records);
-        } else {
-          const snapshot = await adminDb.collection('registrations').where('event', '==', event.slug).get();
-          computedCount = snapshot.size;
-        }
         await adminDb.collection('events').doc(event.slug).set(
           {
             registered_count: computedCount,
@@ -179,13 +198,27 @@ export async function GET(request: Request) {
           },
           { merge: true }
         );
-        return [event.slug, computedCount] as const;
+        return [
+          event.slug,
+          {
+            registered: computedCount,
+            checkedIn: checkedInCount,
+            remaining: Math.max(0, computedCount - checkedInCount)
+          }
+        ] as const;
       })
     );
 
     const counts = Object.fromEntries(entries);
-    const total = entries.reduce((accumulator, [, count]) => accumulator + count, 0);
-    return NextResponse.json({ counts, total });
+    const totalRegistered = entries.reduce((accumulator, [, count]) => accumulator + count.registered, 0);
+    const totalCheckedIn = entries.reduce((accumulator, [, count]) => accumulator + count.checkedIn, 0);
+    return NextResponse.json({
+      counts,
+      total: totalRegistered,
+      totalRegistered,
+      totalCheckedIn,
+      totalRemaining: Math.max(0, totalRegistered - totalCheckedIn)
+    });
   }
 
   const event = url.searchParams.get('event');

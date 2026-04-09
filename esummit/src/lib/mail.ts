@@ -4,8 +4,10 @@ type MailPayload = {
   html: string;
   attachments?: Array<{
     filename: string;
-    path: string;
-    cid: string;
+    path?: string;
+    content?: Buffer | string;
+    encoding?: string;
+    cid?: string;
   }>;
 };
 

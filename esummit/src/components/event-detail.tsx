@@ -139,6 +139,7 @@ export async function EventDetailPage({ slug }: { slug: EventSlug }) {
               <p key={rule} className="text-lg font-semibold leading-8">{rule}</p>
             ))}
             <p className="pt-2 text-lg font-semibold leading-8 text-amber-50">A team may compete in only one event.</p>
+            <p className="text-base font-medium leading-7 text-amber-50">Please note that once the registration fee has been paid, it is non-refundable under any circumstances, including failure to participate in the event.</p>
           </div>
           <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/5 via-transparent to-white/0 opacity-0 transition group-hover:opacity-100" />
         </GlassCard>

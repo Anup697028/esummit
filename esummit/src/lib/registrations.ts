@@ -4,6 +4,7 @@ import type { EventSlug, RegistrationParticipant, RegistrationRecord } from './t
 import { sendMail } from './mail';
 import { revalidatePath } from 'next/cache';
 import type { Transaction } from 'firebase-admin/firestore';
+import QRCode from 'qrcode';
 
 const COUNTER_MAP: Record<EventSlug, string> = {
   ideathon: 'IDE',
@@ -226,6 +227,7 @@ export async function createRegistration(input: {
     screenshot_url: input.screenshotUrl,
     team_name_normalized: normalizedTeamName,
     status: 'Pending Verification',
+    checked_in: false,
     createdAt: nowIso
   };
 
@@ -377,8 +379,20 @@ export async function notifyTeam(record: RegistrationRecord) {
     throw new Error('Invalid event');
   }
 
+  const qrPayload = JSON.stringify({ registration_id: record.registration_id });
+  const qrDataUrl = await QRCode.toDataURL(qrPayload, {
+    margin: 1,
+    width: 320,
+    color: {
+      dark: '#0f172a',
+      light: '#ffffff'
+    }
+  });
+  const qrBase64 = qrDataUrl.replace(/^data:image\/png;base64,/, '');
+
   const collegeLogoCid = 'college-logo';
   const ecellLogoCid = 'ecell-logo';
+  const qrCodeCid = 'approval-qr-code';
   const collegeLogoPath = `${process.cwd()}/logo/mit-logo.png`;
   const ecellLogoPath = `${process.cwd()}/logo/logo.png`;
 
@@ -395,6 +409,12 @@ export async function notifyTeam(record: RegistrationRecord) {
         filename: 'logo.png',
         path: ecellLogoPath,
         cid: ecellLogoCid
+      },
+      {
+        filename: `${record.registration_id}-qr.png`,
+        content: Buffer.from(qrBase64, 'base64'),
+        encoding: 'base64',
+        cid: qrCodeCid
       }
     ],
     html: `
@@ -459,6 +479,12 @@ export async function notifyTeam(record: RegistrationRecord) {
           </table>
 
           <p style="margin:0 0 18px 0;">Please note that this email serves as your official confirmation and must be presented during entry to the event.</p>
+
+          <div style="margin:0 0 18px 0;padding:14px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
+            <p style="margin:0 0 10px 0;font-weight:600;">Entry QR Code</p>
+            <img src="cid:${qrCodeCid}" alt="Registration QR code" style="height:190px;width:190px;display:block;border:1px solid #e2e8f0;border-radius:8px;background:#ffffff;padding:6px;" />
+            <p style="margin:10px 0 0 0;font-size:13px;color:#334155;">Present this QR code at the check-in desk.</p>
+          </div>
 
           <p style="margin:0 0 8px 0;"><strong>For any queries, contact:</strong></p>
           ${getCoordinatorEmailHtml(record.event)}

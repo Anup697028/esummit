@@ -34,6 +34,9 @@ export type RegistrationRecord = {
   transaction_id: string;
   screenshot_url: string;
   status: 'Pending Verification' | 'Approved' | 'Rejected';
+  checked_in?: boolean;
+  checked_in_time?: string;
+  checkin_method?: 'manual' | 'qr';
   rejection_reason?: string;
   rejectedAt?: string;
   notified?: boolean;
