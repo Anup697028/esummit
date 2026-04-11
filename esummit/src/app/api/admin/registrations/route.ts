@@ -9,6 +9,13 @@ function sortByCreatedAtDesc(records: RegistrationRecord[]) {
   return records.sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime());
 }
 
+function getSpeakerSessionCount(participantCount: number) {
+  if (participantCount >= 3) {
+    return participantCount + 1;
+  }
+  return Math.max(1, participantCount);
+}
+
 function countRegistrationsForEvent(eventSlug: string, records: RegistrationRecord[]) {
   if (eventSlug !== 'speaker-session' && eventSlug !== 'quiz') {
     return records.length;
@@ -19,7 +26,7 @@ function countRegistrationsForEvent(eventSlug: string, records: RegistrationReco
     if (eventSlug === 'quiz') {
       return total + Math.max(0, participants);
     }
-    return total + Math.max(1, participants);
+    return total + getSpeakerSessionCount(participants);
   }, 0);
 }
 
@@ -36,7 +43,7 @@ function countCheckedInForEvent(eventSlug: string, records: RegistrationRecord[]
     if (eventSlug === 'quiz') {
       return total + Math.max(0, participants);
     }
-    return total + Math.max(1, participants);
+    return total + getSpeakerSessionCount(participants);
   }, 0);
 }
 
@@ -151,7 +158,10 @@ async function recordsToCsv(records: RegistrationRecord[], baseUrl: string) {
   ];
 
   const rowGroups = await Promise.all(records.map(async (record) => {
-    const participants = record.participants?.length ? record.participants : [{ name: '', usn: '' }];
+    const participants = [
+      { name: record.team_leader_name ?? '', usn: '' },
+      ...(record.participants?.length ? record.participants : [{ name: '', usn: '' }])
+    ];
     const openUrl = `${baseUrl}/api/admin/registrations?open=${encodeURIComponent(record.registration_id)}`;
     const screenshotLink = `=HYPERLINK("${openUrl}","OPEN")`;
 

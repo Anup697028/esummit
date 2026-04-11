@@ -72,6 +72,13 @@ const EVENT_COORDINATORS: Record<EventSlug, EventCoordinators> = {
   }
 };
 
+function getSpeakerSessionCount(participantCount: number) {
+  if (participantCount >= 3) {
+    return participantCount + 1;
+  }
+  return Math.max(1, participantCount);
+}
+
 function getCoordinatorEmailHtml(eventSlug: EventSlug) {
   const coordinators = EVENT_COORDINATORS[eventSlug];
   const facultyLine = coordinators.faculty
@@ -110,7 +117,7 @@ export async function getRegistrationCount(event: EventSlug) {
       if (event === 'quiz') {
         return total + Math.max(0, participants);
       }
-      return total + Math.max(1, participants);
+      return total + getSpeakerSessionCount(participants);
     }, 0);
   } else {
     const snapshot = await adminDb.collection('registrations').where('event', '==', event).get();
@@ -206,7 +213,7 @@ export async function createRegistration(input: {
 
   const slotsNeeded =
     input.event === 'speaker-session'
-      ? Math.max(1, input.participants.length)
+      ? getSpeakerSessionCount(input.participants.length)
       : input.event === 'quiz'
         ? Math.max(0, input.participants.length)
         : 1;
@@ -241,7 +248,7 @@ export async function createRegistration(input: {
         currentRegistrations = registrationsSnapshot.docs.reduce((total, doc) => {
           const data = doc.data() as RegistrationRecord;
           const participants = Array.isArray(data.participants) ? data.participants.length : 0;
-          return total + Math.max(1, participants);
+          return total + getSpeakerSessionCount(participants);
         }, 0);
       } else if (input.event === 'quiz') {
         currentRegistrations = registrationsSnapshot.docs.reduce((total, doc) => {
