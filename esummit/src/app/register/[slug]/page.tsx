@@ -12,6 +12,8 @@ export default async function EventRegisterPage({ params }: { params: Promise<{ 
   if (!event) return notFound();
   const registeredTeams = await getRegistrationCount(event.slug);
   const isFull = registeredTeams >= event.maxTeams;
+  const countRevealThreshold = event.slug === 'speaker-session' ? 100 : 30;
+  const shouldShowLiveCount = registeredTeams >= countRevealThreshold;
   const registrationLabel = event.slug === 'speaker-session' || event.slug === 'quiz' ? 'Registered Participants' : 'Registered Teams';
 
   return (
@@ -28,7 +30,7 @@ export default async function EventRegisterPage({ params }: { params: Promise<{ 
       </Link>
       {isFull ? (
         <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-rose-500/20 via-pink-500/10 to-fuchsia-500/10 p-6 text-center shadow-2xl shadow-black/25 backdrop-blur-xl">
-          <p className="text-sm text-white/80">{registrationLabel}: {registeredTeams} / {event.maxTeams}</p>
+          {shouldShowLiveCount ? <p className="text-sm text-white/80">{registrationLabel}: {registeredTeams} / {event.maxTeams}</p> : null}
           <p className="mt-2 text-lg font-semibold text-white">Registrations Closed - Slots Full</p>
         </div>
       ) : (

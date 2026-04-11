@@ -91,6 +91,12 @@ export async function EventDetailPage({ slug }: { slug: EventSlug }) {
   const rulesDownload = getRulesDownloadConfig(event.slug);
   const isSpeakerSession = event.slug === 'speaker-session';
   const registrationLabel = isSpeakerSession || event.slug === 'quiz' ? 'Registered Participants' : 'Registered Teams';
+  const countRevealThreshold = isSpeakerSession ? 100 : 30;
+  const shouldShowLiveCount = registered >= countRevealThreshold;
+  const liveTitle = shouldShowLiveCount ? `${registrationLabel}: ${registered} / ${event.maxTeams}` : 'Registrations Open';
+  const liveDescription = shouldShowLiveCount
+    ? 'Real-time count from Firestore registrations.'
+    : `${registrationLabel} will be shown after ${countRevealThreshold} registrations.`;
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -114,7 +120,7 @@ export async function EventDetailPage({ slug }: { slug: EventSlug }) {
         </GlassCard>
 
         <GlassCard className={`group relative overflow-hidden border ${detailThemes.live} bg-gradient-to-br ${detailThemes.live} transition-all duration-300 hover:-translate-y-1 hover:border-white/50 hover:shadow-2xl hover:shadow-black/40`}>
-          <SectionTitle eyebrow="Live" title={`${registrationLabel}: ${registered} / ${event.maxTeams}`} description="Real-time count from Firestore registrations." />
+          <SectionTitle eyebrow="Live" title={liveTitle} description={liveDescription} />
           {isFull ? (
             <>
               <button type="button" disabled className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-violet-400 px-6 py-3 text-sm font-semibold text-slate-950 opacity-70 transition">

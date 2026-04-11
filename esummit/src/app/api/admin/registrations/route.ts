@@ -45,6 +45,43 @@ function csvEscape(value: unknown) {
   return `"${text.replace(/"/g, '""')}"`;
 }
 
+function normalizeBaseUrl(rawUrl: string) {
+  const value = rawUrl.trim().replace(/\/$/, '');
+  if (!value) {
+    return '';
+  }
+
+  try {
+    const parsed = new URL(value);
+    if (parsed.hostname === '0.0.0.0') {
+      parsed.hostname = 'localhost';
+    }
+    return `${parsed.protocol}//${parsed.host}`.replace(/\/$/, '');
+  } catch {
+    return '';
+  }
+}
+
+function resolveBaseUrl(request: Request, fallbackUrl: URL) {
+  const configuredBaseUrl = normalizeBaseUrl(
+    process.env.APP_BASE_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? ''
+  );
+  if (configuredBaseUrl) {
+    return configuredBaseUrl;
+  }
+
+  const forwardedProto = request.headers.get('x-forwarded-proto')?.split(',')[0]?.trim();
+  const forwardedHost = request.headers.get('x-forwarded-host')?.split(',')[0]?.trim();
+  if (forwardedProto && forwardedHost) {
+    const forwardedUrl = normalizeBaseUrl(`${forwardedProto}://${forwardedHost}`);
+    if (forwardedUrl) {
+      return forwardedUrl;
+    }
+  }
+
+  return normalizeBaseUrl(`${fallbackUrl.protocol}//${fallbackUrl.host}`);
+}
+
 function extractStoragePathFromUrl(value: string) {
   if (!value) return '';
 
@@ -236,7 +273,7 @@ export async function GET(request: Request) {
   }
 
   if (format === 'csv') {
-    const baseUrl = `${url.protocol}//${url.host}`;
+    const baseUrl = resolveBaseUrl(request, url);
     const csv = await recordsToCsv(records, baseUrl);
     return new NextResponse(csv, {
       headers: {
