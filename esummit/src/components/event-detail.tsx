@@ -91,12 +91,10 @@ export async function EventDetailPage({ slug }: { slug: EventSlug }) {
   const rulesDownload = getRulesDownloadConfig(event.slug);
   const isSpeakerSession = event.slug === 'speaker-session';
   const registrationLabel = isSpeakerSession || event.slug === 'quiz' ? 'Registered Participants' : 'Registered Teams';
-  const countRevealThreshold = isSpeakerSession ? 100 : 30;
+  const countRevealThreshold = isSpeakerSession ? 100 : 10;
   const shouldShowLiveCount = registered >= countRevealThreshold;
   const liveTitle = shouldShowLiveCount ? `${registrationLabel}: ${registered} / ${event.maxTeams}` : 'Registrations Open';
-  const liveDescription = shouldShowLiveCount
-    ? 'Real-time count from Firestore registrations.'
-    : `${registrationLabel} will be shown after ${countRevealThreshold} registrations.`;
+  const liveDescription = shouldShowLiveCount ? 'Real-time count from Firestore registrations.' : undefined;
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">

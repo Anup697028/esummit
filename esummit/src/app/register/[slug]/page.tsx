@@ -12,7 +12,7 @@ export default async function EventRegisterPage({ params }: { params: Promise<{ 
   if (!event) return notFound();
   const registeredTeams = await getRegistrationCount(event.slug);
   const isFull = registeredTeams >= event.maxTeams;
-  const countRevealThreshold = event.slug === 'speaker-session' ? 100 : 30;
+  const countRevealThreshold = event.slug === 'speaker-session' ? 100 : 10;
   const shouldShowLiveCount = registeredTeams >= countRevealThreshold;
   const registrationLabel = event.slug === 'speaker-session' || event.slug === 'quiz' ? 'Registered Participants' : 'Registered Teams';
 
