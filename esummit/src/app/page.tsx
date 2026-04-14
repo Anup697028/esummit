@@ -4,6 +4,7 @@ import { ArrowRight, Award, BadgeCheck, Cpu, GraduationCap, Sparkles, Zap, Users
 import { SiteShell } from '@/components/site-shell';
 import { GallerySection } from '../components/gallery-section';
 import { GlassCard, SectionTitle } from '@/components/ui';
+import { SpeakersSection } from '@/components/speakers-section';
 import { summitHighlights } from '@/lib/events';
 
 export default function HomePage() {
@@ -140,11 +141,16 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+          <GlassCard className="mt-6 border border-cyan-300/30 bg-cyan-400/10 shadow-[0_0_25px_rgba(34,211,238,0.12)]">
+            <p className="text-sm font-medium leading-7 text-cyan-50">
+              Registrations will close on 25th April. All registered teams are eligible to register in the quiz event.
+            </p>
+          </GlassCard>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <SectionTitle eyebrow="Speakers" title="Speakers" description="" />
-          <GlassCard className="mt-5 text-sm text-slate-300">Stay tuned for an exciting lineup of visionary entrepreneurs and dynamic discussions that will spark ideas, ignite ambition, and leave you inspired.</GlassCard>
+          <SpeakersSection />
         </section>
 
         <GallerySection />
