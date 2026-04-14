@@ -3,16 +3,16 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { Linkedin, X } from 'lucide-react';
-import { GlassCard } from '@/components/ui';
 
-type Speaker = {
+const spotlightSpeaker: {
   name: string;
   role: string;
   image: string;
   linkedin: string;
-};
-
-const spotlightSpeaker: Speaker & { tagline: string; bio: string; extendedBio: string } = {
+  tagline: string;
+  bio: string;
+  extendedBio: string;
+} = {
   name: 'Rtn Shadakshari Swamy',
   role: 'Managing Director, Agamin Group | CII Member',
   tagline: 'Transforming healthcare and innovation through visionary leadership',
@@ -22,45 +22,6 @@ const spotlightSpeaker: Speaker & { tagline: string; bio: string; extendedBio: s
   image: '/logo/1642753558769.jfif',
   linkedin: 'https://www.linkedin.com/in/shadakshari'
 };
-
-const gridSpeakers: Speaker[] = [
-  {
-    name: 'Dr. Asha Nair',
-    role: 'Innovation Strategist',
-    image: '/logo/1642753558769.jfif',
-    linkedin: 'https://www.linkedin.com/in/shadakshari'
-  },
-  {
-    name: 'Karthik Rao',
-    role: 'Startup Mentor',
-    image: '/logo/1642753558769.jfif',
-    linkedin: 'https://www.linkedin.com/in/shadakshari'
-  },
-  {
-    name: 'Priya Menon',
-    role: 'Product Leader',
-    image: '/logo/1642753558769.jfif',
-    linkedin: 'https://www.linkedin.com/in/shadakshari'
-  },
-  {
-    name: 'Rahul Dev',
-    role: 'Venture Advisor',
-    image: '/logo/1642753558769.jfif',
-    linkedin: 'https://www.linkedin.com/in/shadakshari'
-  },
-  {
-    name: 'Neha Kulkarni',
-    role: 'Brand Architect',
-    image: '/logo/1642753558769.jfif',
-    linkedin: 'https://www.linkedin.com/in/shadakshari'
-  },
-  {
-    name: 'Arjun Bhat',
-    role: 'Growth Consultant',
-    image: '/logo/1642753558769.jfif',
-    linkedin: 'https://www.linkedin.com/in/shadakshari'
-  }
-];
 
 export function SpeakersSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -132,37 +93,6 @@ export function SpeakersSection() {
             </button>
           </div>
         </div>
-      </div>
-
-      <GlassCard className="mt-5 text-sm text-slate-300">
-        Stay tuned for an exciting lineup of visionary entrepreneurs and dynamic discussions that will spark ideas, ignite ambition, and leave you inspired.
-      </GlassCard>
-
-      <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {gridSpeakers.map((speaker, index) => (
-          <article
-            key={speaker.name}
-            className={`rounded-xl border border-white/10 bg-gray-900 p-4 text-center shadow-black/30 transition-all duration-500 hover:scale-105 hover:shadow-lg ${
-              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-            }`}
-            style={{ transitionDelay: `${index * 90}ms` }}
-          >
-            <div className="mx-auto relative h-20 w-20 overflow-hidden rounded-full border border-cyan-300/30">
-              <Image src={speaker.image} alt={speaker.name} fill className="object-cover" sizes="80px" />
-            </div>
-            <h4 className="mt-3 text-sm font-semibold text-white">{speaker.name}</h4>
-            <p className="mt-1 text-xs text-slate-300">{speaker.role}</p>
-            <a
-              href={speaker.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${speaker.name} LinkedIn profile`}
-              className="mt-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-slate-300 transition duration-300 hover:scale-110 hover:bg-blue-800/40 hover:text-blue-300"
-            >
-              <Linkedin className="h-4 w-4" />
-            </a>
-          </article>
-        ))}
       </div>
 
       {isProfileOpen ? (
