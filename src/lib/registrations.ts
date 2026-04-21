@@ -79,6 +79,10 @@ function getSpeakerSessionCount(participantCount: number) {
   return Math.max(1, participantCount);
 }
 
+function getQuizRegistrationCount() {
+  return 1;
+}
+
 function getCoordinatorEmailHtml(eventSlug: EventSlug) {
   const coordinators = EVENT_COORDINATORS[eventSlug];
   const facultyLine = coordinators.faculty
@@ -115,7 +119,7 @@ export async function getRegistrationCount(event: EventSlug) {
       const data = doc.data() as RegistrationRecord;
       const participants = Array.isArray(data.participants) ? data.participants.length : 0;
       if (event === 'quiz') {
-        return total + Math.max(0, participants);
+        return total + getQuizRegistrationCount();
       }
       return total + getSpeakerSessionCount(participants);
     }, 0);
@@ -215,7 +219,7 @@ export async function createRegistration(input: {
     input.event === 'speaker-session'
       ? getSpeakerSessionCount(input.participants.length)
       : input.event === 'quiz'
-        ? Math.max(0, input.participants.length)
+        ? getQuizRegistrationCount()
         : 1;
   const { registrationId } = await createRegistrationId(input.event, event.maxTeams);
   const nowIso = new Date().toISOString();
@@ -251,11 +255,7 @@ export async function createRegistration(input: {
           return total + getSpeakerSessionCount(participants);
         }, 0);
       } else if (input.event === 'quiz') {
-        currentRegistrations = registrationsSnapshot.docs.reduce((total, doc) => {
-          const data = doc.data() as RegistrationRecord;
-          const participants = Array.isArray(data.participants) ? data.participants.length : 0;
-          return total + Math.max(0, participants);
-        }, 0);
+        currentRegistrations = registrationsSnapshot.size * getQuizRegistrationCount();
       } else {
         currentRegistrations = registrationsSnapshot.size;
       }

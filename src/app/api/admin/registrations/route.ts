@@ -16,6 +16,10 @@ function getSpeakerSessionCount(participantCount: number) {
   return Math.max(1, participantCount);
 }
 
+function getQuizRegistrationCount() {
+  return 1;
+}
+
 function countRegistrationsForEvent(eventSlug: string, records: RegistrationRecord[]) {
   if (eventSlug !== 'speaker-session' && eventSlug !== 'quiz') {
     return records.length;
@@ -24,7 +28,7 @@ function countRegistrationsForEvent(eventSlug: string, records: RegistrationReco
   return records.reduce((total, record) => {
     const participants = Array.isArray(record.participants) ? record.participants.length : 0;
     if (eventSlug === 'quiz') {
-      return total + Math.max(0, participants);
+      return total + getQuizRegistrationCount();
     }
     return total + getSpeakerSessionCount(participants);
   }, 0);
@@ -41,7 +45,7 @@ function countCheckedInForEvent(eventSlug: string, records: RegistrationRecord[]
     }
     const participants = Array.isArray(record.participants) ? record.participants.length : 0;
     if (eventSlug === 'quiz') {
-      return total + Math.max(0, participants);
+      return total + getQuizRegistrationCount();
     }
     return total + getSpeakerSessionCount(participants);
   }, 0);

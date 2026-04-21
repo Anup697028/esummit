@@ -90,7 +90,7 @@ export async function EventDetailPage({ slug }: { slug: EventSlug }) {
   const isFull = registered >= event.maxTeams;
   const rulesDownload = getRulesDownloadConfig(event.slug);
   const isSpeakerSession = event.slug === 'speaker-session';
-  const registrationLabel = isSpeakerSession || event.slug === 'quiz' ? 'Registered Participants' : 'Registered Teams';
+  const registrationLabel = isSpeakerSession ? 'Registered Participants' : 'Registered Teams';
   const countRevealThreshold = isSpeakerSession ? 100 : 10;
   const shouldShowLiveCount = registered >= countRevealThreshold;
   const liveTitle = shouldShowLiveCount ? `${registrationLabel}: ${registered} / ${event.maxTeams}` : 'Registrations Open';

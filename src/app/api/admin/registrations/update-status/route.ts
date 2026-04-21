@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       record.event === 'speaker-session'
         ? Math.max(1, record.participants?.length ?? 0)
         : record.event === 'quiz'
-          ? Math.max(0, record.participants?.length ?? 0)
+          ? 1
           : 1;
 
     await adminDb.runTransaction(async (transaction) => {
