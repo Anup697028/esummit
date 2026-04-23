@@ -4,19 +4,17 @@ import { useEffect, useState } from 'react';
 import { Clock3 } from 'lucide-react';
 
 export function AnnouncementPopup() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [closing, setClosing] = useState(false);
 
   useEffect(() => {
-    const openTimer = window.setTimeout(() => setVisible(true), 50);
-    const closeTimer = window.setTimeout(() => setClosing(true), 5050);
+    const closeTimer = window.setTimeout(() => setClosing(true), 5000);
     const unmountTimer = window.setTimeout(() => {
       setVisible(false);
       setClosing(false);
-    }, 5450);
+    }, 5500);
 
     return () => {
-      window.clearTimeout(openTimer);
       window.clearTimeout(closeTimer);
       window.clearTimeout(unmountTimer);
     };
