@@ -1,11 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { BellRing, Clock3, Sparkles } from 'lucide-react';
 
 export function AnnouncementPopup() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(true);
   const [closing, setClosing] = useState(false);
+
+  const isAdminPage = pathname.startsWith('/admin');
 
   useEffect(() => {
     const closeTimer = window.setTimeout(() => setClosing(true), 10000);
@@ -20,7 +24,7 @@ export function AnnouncementPopup() {
     };
   }, []);
 
-  if (!visible && !closing) {
+  if (isAdminPage || (!visible && !closing)) {
     return null;
   }
 
